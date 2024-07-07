@@ -1,0 +1,27 @@
+{
+  "name": "github-readme-fancy-website-card",
+  "version": "1.0.0",
+  "description": "An api used to generate a website preview card image for your github README docs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "zaddle",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.18.101",
+    "@vercel/node": "^3.2.1",
+    "canvas": "^2.11.2",
+    "chai": "^5.1.1",
+    "express": "^4.19.2",
+    "mocha": "^10.6.0",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "image-size": "^1.1.1",
+    "micro": "^10.0.1"
+  },
+  "type": "module"
+}
