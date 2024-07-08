@@ -4,7 +4,8 @@
   "description": "An api used to generate a website preview card image for your github README docs.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "dev": "node ./api/index.js"
   },
   "author": "zaddle",
   "license": "MIT",

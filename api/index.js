@@ -1,6 +1,5 @@
-import parseMeta from "../lib/parseMeta";
-import { Card } from "../lib/card";
-import vercel from "@vercel/node";
+import parseMeta from "../lib/parseMeta.js";
+import Card from "../lib/card.js";
 import sizeOf from "image-size";
 import axios from "axios";
 
@@ -13,13 +12,12 @@ async function getImageSize(url) {
         return dimensions;
     } catch (error) {
         console.log(error);
-        return { height: 0, width: 0 };
+        return { height: -1, width: -1 };
     }
 }
 
-export default vercel.json(async (req, res) => {
-    const { url } = req.query; // Get the URL from the query string
-    const { preview_image_url } = req.query; // Get the preview_image from the query string, optional
+export default async (req, res) => {
+    const { url , preview_image } = req.query;
     // handle the exception where url is failed to fetch
     if (!url) {
         res.status(400).send("URL is required");
@@ -32,25 +30,22 @@ export default vercel.json(async (req, res) => {
         return;
     }
     // if icon is not provided, use the default icon
-    icon = icon ? icon : "https://cdn.jsdelivr.net/gh/rahuldkjain/gh-profile-readme-generator/assets/icon.png";
+    icon = icon ? icon : "https://zaddle.top/img/favicon.ico";
     // if preview_image is provided, use it as the image
-    image = preview_image ? preview_image : image;
+    image_url = preview_image ? preview_image : image_url;
     // if image is not provided, use the default image
-    image = image ? image : "https://cdn.jsdelivr.net/gh/rahuldkjain/gh-profile-readme-generator/assets/default.jpg";
+    image_url = image_url ? image_url : "https://cdn.jsdelivr.net/gh/rahuldkjain/gh-profile-readme-generator/assets/default.jpg";
     // calculate the size of the image
-    const { image_height, image_width } = getImageSize(image);
-    const { icon_height, icon_width } = getImageSize(icon);
+    const { height: image_height, width: image_width } = await getImageSize(image_url);
+    const { height: icon_height, width: icon_width } = await getImageSize(icon);
     // if the image size is not found, return an error
-    if (!image_height || !image_width || !icon_height || !icon_width) {
-        res.status(400).send("Image not found");
-        return;
-    }
     const card = new Card({
-        height: height + 200,
-        width: width,
+        height: image_height + 200,
+        width: image_width,
         border_radius: 10,
     });
     const svg = card.render({ title: title, desc: description, image: {url: image_url, height: image_height, width: image_width}, icon: {url: icon, height: icon_height, width: icon_width} });
     res.setHeader("Content-Type", "image/svg+xml");
-    res.send(svg);
-    });
+    res.status(200).send(svg);
+    // res.send(JSON.stringify({ title, description, image_url, icon , image_height, image_width, icon_height, icon_width }));
+    };
