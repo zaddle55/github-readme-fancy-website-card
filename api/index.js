@@ -18,6 +18,18 @@ async function getImageSize(url) {
     }
 }
 
+async function imageBase64(url) {
+    try {
+        const response = await axios.get(url, {
+            responseType: "arraybuffer",
+        });
+        const base64 = Buffer.from(response.data, "binary").toString("base64");
+        return base64;
+    } catch (error) {
+        throw new Error("Image Not Found");
+    }
+}
+
 function resizeImage({ height: pre_height, width: pre_width }, ref_value) {
     const aspectRatio =pre_width / pre_height;
     let width = ref_value ? ref_value : CARD_WIDTH_UPPER_LIMIT;
@@ -69,11 +81,14 @@ export default async (req, res) => {
     const svg = card.render({
       title: title,
       desc: description,
-      image: { url: image_url, height: image_height, width: image_width },
-      icon: { url: icon, height: icon_height, width: icon_width },
+      image: { url: await imageBase64(image_url), height: image_height, width: image_width },
+      icon: { url: await imageBase64(icon), height: icon_height, width: icon_width },
     });
+    console.log(imageBase64(image_url));
+    console.log(imageBase64(icon));
     res.setHeader("Content-Type", "image/svg+xml");
     res.status(200).send(svg);
+    // res.status(200).send(svg);
     // res.send(JSON.stringify({ title, description, image_url, icon , image_height, image_width, icon_height, icon_width }));
   } catch (error) {
     console.log(error);
