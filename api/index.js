@@ -84,9 +84,9 @@ export default async (req, res) => {
       image: { url: await imageBase64(image_url), height: image_height, width: image_width },
       icon: { url: await imageBase64(icon), height: icon_height, width: icon_width },
     });
-    console.log(imageBase64(image_url));
-    console.log(imageBase64(icon));
     res.setHeader("Content-Type", "image/svg+xml");
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.status(200).send(svg);
     // res.status(200).send(svg);
     // res.send(JSON.stringify({ title, description, image_url, icon , image_height, image_width, icon_height, icon_width }));
