@@ -34,8 +34,36 @@ async function imageBase64(url) {
 }
 
 function handleDescription(description) {
-    if (description.length > 90) {
-        return description.slice(0, 90) + "...";
+    const ENCHARS = /[^\x00-\x7F]/g;
+    const CNCHARS = /[^\u4e00-\u9fa5]/g;
+    const SPACE = /\s/g;
+    const OTHERS = /[^a-zA-Z0-9\u4e00-\u9fa5]/g;
+    const ENCHAR_LENGTH = 7;
+    const CNCHAR_LENGTH = 14.5;
+    const SPACE_LENGTH = 1;
+    const OTHERS_LENGTH = 7;
+    const encharsLength = (description.match(ENCHARS) || []).length * ENCHAR_LENGTH;
+    const cncharsLength = (description.match(CNCHARS) || []).length * CNCHAR_LENGTH;
+    const spaceLength = (description.match(SPACE) || []).length * SPACE_LENGTH;
+    const othersLength = (description.match(OTHERS) || []).length * OTHERS_LENGTH;
+    const length = encharsLength + cncharsLength + spaceLength + othersLength;
+    // if the description is too long, truncate it
+    if (length > CARD_WIDTH_UPPER_LIMIT) {
+        let count = 0;
+        let index = 0;
+        console.log(description.length);
+        for (let i = 0; i < description.length; i++) {
+            if (description.charCodeAt(i) > 255) {
+                count += 15;
+            } else {
+                count += 7;
+            }
+            if (count > CARD_WIDTH_UPPER_LIMIT) {
+                index = i;
+                break;
+            }
+        }
+        description = description.slice(0, index) + "...";
     }
     return description;
 }
