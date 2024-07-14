@@ -2,7 +2,6 @@ import parseMeta from "../lib/parseMeta.js";
 import Card from "../lib/card.js";
 import sizeOf from "image-size";
 import axios from "axios";
-import { type } from "os";
 
 const CARD_WIDTH_UPPER_LIMIT = 580;
 const ICON_SIZE = 25;

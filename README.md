@@ -20,19 +20,119 @@
 
 ## Usage
 
-Get the svg image through the api `https://github-readme-fancy-website-card.vercel.app` and incline it in markdown or html.
+Get the svg image through the api https://github-readme-fancy-website-card.vercel.app (or my customized domain https://api.zaddle.top) and incline it in markdown or html.
 
 There is two parameters the api requires:
 
 | Name | Description| Type |
 |---|----|--|
 | `url` | The url of website of which you want to generate social card. | string |
-| `preview` | The links to preview image which you assgin to, if it is empty then api will try to parse the value of segment `meta[property="og:image]` in your website header. | string |
+| `preview` | The links to preview image which you assgin to, if it is empty then api will try to parse the value of segment `meta[property="og:image"]` in your website header. | string |
 
-For instance, if you want to generate the card for `google.com`, then insert following code in your markdown
+For instance, if you want to generate the card for `github.com`, then insert following code in your markdown
 
 ```md
-![](https://github-readme-fancy-website-card.vercel.app/?url=https://google.com)
+![GitHub](https://github-readme-fancy-website-card.vercel.app/?url=https://github.com)
 ```
 
-![nodejs](https://api.zaddle.top?url=https://www.axios-http.cn)
+or in HTML
+
+```html
+<img src="https://github-readme-fancy-website-card.vercel.app/?url=https://github.com" alt="GitHub" />
+```
+
+The card is shown as follows:
+
+![GitHub](https://github-readme-fancy-website-card.vercel.app/?url=https://github.com)
+
+## Demo
+
+**My blog**:
+
+```html
+<a href="https://zaddle.top">
+  <img src="https://api.zaddle.top/?url=https://zaddle.top&preview=https://raw.githubusercontent.com/zaddle55/Picgo/main/images/alice.jpg" alt="zaddle's blog" width="560px" />
+</a>
+```
+
+<a href="https://zaddle.top">
+  <img src="https://api.zaddle.top/?url=https://zaddle.top&preview=https://raw.githubusercontent.com/zaddle55/Picgo/main/images/alice.jpg" alt="zaddle's blog" width="560px" />
+</a>
+
+**Bangumi**:
+
+```html
+<a href="https://bangumi.tv">
+  <img src="https://api.zaddle.top/?url=https://bangumi.tv&preview=https://th.bing.com/th/id/OIP.tdQQN3675pYpufw1Xm7dawAAAA?rs=1&pid=ImgDetMain" alt="Bangumi" width="560px" />
+</a>
+```
+
+<a href="https://bangumi.tv">
+  <img src="https://api.zaddle.top/?url=https://bangumi.tv&preview=https://th.bing.com/th/id/OIP.tdQQN3675pYpufw1Xm7dawAAAA?rs=1&pid=ImgDetMain" alt="Bangumi" width="560px" />
+</a>
+
+**GitLab:**
+
+```html
+<a href="https://gitlab.com">
+  <img src="https://api.zaddle.top/?url=https://about.gitlab.com" alt="GitLab" width="560px" />
+</a>
+```
+
+<a href="https://gitlab.com">
+  <img src="https://api.zaddle.top/?url=https://about.gitlab.com" alt="GitLab" width="560px" />
+</a>
+
+## Deploy on your own
+
+This api is run with serverless functions on [Vercel](https://vercel.com). Register a new vercel account or log in you can build a vercel project.
+
+### Project structure
+
+First clone this repo to your local
+
+```bash
+git clone https://github.com/zaddle55/github-readme-fancy-website-card.git
+```
+
+Then you will get the following project, and `index.js` is the entry for this api.
+
+```plain text
+└── 📁github-readme-fancy-website-card
+    └── .gitignore
+    └── 📁.vercel
+        └── 📁cache
+        └── project.json
+        └── README.txt
+    └── 📁api
+        └── ⭐index.js <-- api entry
+    └── 📁css
+        └── card.css
+    └── 📁lib
+        └── card.js
+        └── parseMeta.js
+    └── package-lock.json
+    └── package.json
+    └── 📁static
+        └── icon_default.png
+        └── preview_default.png
+    └── vercel.json
+```
+
+If you are the first time to develop vercel project, it's necessary to download vercel cli by npm.
+
+```bash
+npm i -g vercel
+```
+
+Then you can test your vercel project on `localhost:3000` using
+
+```bash
+vercel dev
+```
+
+or publish as a public vercel project using
+
+```bash
+vercel prod
+```
