@@ -2,6 +2,7 @@ import parseMeta from "../lib/parseMeta.js";
 import Card from "../lib/card.js";
 import sizeOf from "image-size";
 import axios from "axios";
+import { type } from "os";
 
 const CARD_WIDTH_UPPER_LIMIT = 580;
 const ICON_SIZE = 25;
@@ -19,15 +20,24 @@ async function getImageSize(url) {
 }
 
 async function imageBase64(url) {
-    try {
-        const response = await axios.get(url, {
-            responseType: "arraybuffer",
-        });
-        const base64 = Buffer.from(response.data, "binary").toString("base64");
-        return base64;
-    } catch (error) {
-        throw new Error("Image Not Found");
+  try {
+    const response = await axios
+      .get(url, {
+        responseType: "arraybuffer",
+      });
+    const contentType = response.headers["content-type"];
+    const base64 = Buffer.from(response.data, "binary").toString("base64");
+    return { base64 , contentType };
+  } catch (error) {
+    throw new Error("Image Not Found");
+  }
+}
+
+function handleDescription(description) {
+    if (description.length > 90) {
+        return description.slice(0, 90) + "...";
     }
+    return description;
 }
 
 function resizeImage({ height: pre_height, width: pre_width }, ref_value) {
@@ -51,6 +61,8 @@ export default async (req, res) => {
       res.status(400).send("Title and Description are required");
       return;
     }
+
+    description = handleDescription(description);
 
     // if icon is not provided, use the default icon
     icon = icon
@@ -81,8 +93,8 @@ export default async (req, res) => {
     const svg = card.render({
       title: title,
       desc: description,
-      image: { url: await imageBase64(image_url), height: image_height, width: image_width },
-      icon: { url: await imageBase64(icon), height: icon_height, width: icon_width },
+      image: { url: (await imageBase64(image_url)).base64, height: image_height, width: image_width, type: (await imageBase64(image_url)).contentType },
+      icon: { url: (await imageBase64(icon)).base64, height: icon_height, width: icon_width, type: (await imageBase64(icon)).contentType },
     });
     res.setHeader("Content-Type", "image/svg+xml");
     res.setHeader('Access-Control-Allow-Origin', '*');

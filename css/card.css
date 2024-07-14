@@ -3,11 +3,20 @@
     height: 100%;
     background-color: transparent;
     fill: transparent;
-    border-radius: 8px;
-    box-shadow: 1 5px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     position: relative;
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Ubuntu,Helvetica Neue,sans-serif;
+}
+
+.card-bg {
+    stroke-width: 0.12em;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.separate-line {
+    stroke: #8899a6;
+    stroke-width: 0.05em;
+    stroke-opacity: 0.3;
 }
 
 .title {
@@ -24,12 +33,11 @@
 
 .desc {
     height: 2.6em;
-    max-height: 2.6em;
+    max-width: 500px;
     margin-top: .32333em;
     line-height: 1.3em;
     letter-spacing: normal;
     word-wrap: break-word;
-    overflow: hidden;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
